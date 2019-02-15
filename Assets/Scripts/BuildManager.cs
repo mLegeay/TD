@@ -72,7 +72,7 @@ public class BuildManager : MonoBehaviour {
 	void OnDrawGizmos()
 	{
 		if(node != null){
-		Gizmos.color = Color.yellow;
+			Gizmos.color = Color.yellow;
 			Gizmos.DrawRay (new Vector3(node.gridX + 0.5f, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f) + Vector3.one);
 			Gizmos.DrawWireCube (new Vector3(node.gridX + 0.5f, 0, node.gridY + 0.5f) + new Vector3(0.5f, 0.5f, 0.5f) + Vector3.one, Vector3.one);
 		}
