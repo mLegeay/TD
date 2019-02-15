@@ -3,4 +3,5 @@
 *.dll
 *.xml
 *.mdb
-Temp\*
+
+Temp/
