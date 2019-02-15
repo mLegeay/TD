@@ -10,6 +10,10 @@ public class Unit : MonoBehaviour {
 	int targetIndex;
 	public Vector3 currentWaypoint;
 
+	private bool pathSucess;
+	public bool PathSucess
+	{ get { return pathSucess; } }
+
 	static List<Unit> unitList = new List<Unit>();
 	public static List<Unit> UnitList
 	{ get { return unitList; } }
@@ -25,6 +29,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void OnPathFound(Vector3[] newPath, bool pathSuccesful) {
+		pathSucess = pathSuccesful;
 		if (pathSuccesful) {
 			path = newPath;
 			targetIndex = 0;
