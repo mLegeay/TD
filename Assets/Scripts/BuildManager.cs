@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BuildManager : MonoBehaviour {
 
+	Node node;
 	private static BuildManager instance;
 	public static BuildManager Instance
 	{
@@ -15,6 +16,7 @@ public class BuildManager : MonoBehaviour {
 	public BuildManager()
 	{
 		instance = this;
+		Node node = null;
 	}
 
 	public bool Construct(Node node)
@@ -23,20 +25,7 @@ public class BuildManager : MonoBehaviour {
 		cube.layer = 8;
 		cube.transform.position = new Vector3 (node.gridX, 0.5f, node.gridY);
 
-		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable && MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable && MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable && MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable) {
-			MapGrid.Instance.grid [node.gridX, node.gridY].walkable = false;
-			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable = false;
-			MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable = false;
-			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable = false;
-
-			if (!CanBuild (node)) {
-				Destroy (cube);
-				MapGrid.Instance.grid [node.gridX, node.gridY].walkable = true;
-				MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable = true;
-				MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable = true;
-				MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable = true;
-			}
-		} else {
+		if (!CanBuild (node)) {
 			Destroy (cube);
 		}
 
@@ -46,17 +35,46 @@ public class BuildManager : MonoBehaviour {
 		return true;
 	}
 		
-	public bool CanBuild(Node node)
+	public bool CanBuild(Node _node)
 	{
-		// if node empty and node doesn't block pathfinding from starting point to endpoint, then ++ if in boundaries
-		// true
-		// else
-		// false
+		node = _node;
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX + 0.5f, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX -0.5f, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX + 0.5f, 0, node.gridY - 0.5f), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 0.5f, 0, node.gridY - 0.5f), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
 		bool canBuild = false;
-		SpawnerController.Instance.findNewPath ();
-		if (SpawnerController.Instance.PathSucess) {
-			canBuild = true;
+
+		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable &&
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable &&
+			MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable &&
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable){
+
+			MapGrid.Instance.grid [node.gridX, node.gridY].walkable = false;
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable = false;
+			MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable = false;
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable = false;
+
+			SpawnerController.Instance.findNewPath ();
+			if (SpawnerController.Instance.PathSucess) {
+				canBuild = true;
+			} else {
+				MapGrid.Instance.grid [node.gridX, node.gridY].walkable = true;
+				MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable = true;
+				MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable = true;
+				MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable = true;
+			}
+
+		} else {
+			canBuild = false;
 		}
 		return canBuild;
+	}
+	void OnDrawGizmos()
+	{
+		if(node != null){
+		Gizmos.color = Color.yellow;
+			Gizmos.DrawRay (new Vector3(node.gridX + 0.5f, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f) + Vector3.one);
+			Gizmos.DrawWireCube (new Vector3(node.gridX + 0.5f, 0, node.gridY + 0.5f) + new Vector3(0.5f, 0.5f, 0.5f) + Vector3.one, Vector3.one);
+		}
 	}
 }
