@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class BuildManager : MonoBehaviour {
 
-	Node node;
 	private static BuildManager instance;
 	public static BuildManager Instance
 	{
@@ -16,7 +15,6 @@ public class BuildManager : MonoBehaviour {
 	public BuildManager()
 	{
 		instance = this;
-		Node node = null;
 	}
 
 	public bool Construct(Node node)
@@ -35,13 +33,8 @@ public class BuildManager : MonoBehaviour {
 		return true;
 	}
 		
-	public bool CanBuild(Node _node)
+	public bool CanBuild(Node node)
 	{
-		node = _node;
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
 		bool canBuild = false;
 
 		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable &&
@@ -73,6 +66,7 @@ public class BuildManager : MonoBehaviour {
 		}
 		return canBuild;
 	}
+	/*
 	void OnDrawGizmos()
 	{
 		if(node != null){
@@ -84,4 +78,5 @@ public class BuildManager : MonoBehaviour {
 			Gizmos.DrawWireCube (new Vector3(node.gridX - 1, 0, node.gridY - 1) + new Vector3(0.5f, 0.5f, 0.5f), Vector3.one);
 		}
 	}
+	*/
 }
