@@ -38,16 +38,20 @@ public class BuildManager : MonoBehaviour {
 	public bool CanBuild(Node _node)
 	{
 		node = _node;
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), Vector3.zero));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
+		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 1, 0.5f)));
 		bool canBuild = false;
 
 		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable &&
 			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable &&
 			MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable &&
-			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable){
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable &&
+			!Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY + 0.5f), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0.5f)) &&
+			!Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0.5f)) &&
+			!Physics.BoxCast(new Vector3(node.gridX, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0.5f)) &&
+			!Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1), new Vector3(0.5f, 0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0.5f))){
 
 			MapGrid.Instance.grid [node.gridX, node.gridY].walkable = false;
 			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable = false;
