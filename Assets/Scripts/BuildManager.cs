@@ -43,7 +43,6 @@ public class BuildManager : MonoBehaviour {
 	public bool CanBuild(Node _node)
 	{
 		node = _node;
-		Debug.Log (Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1) + Vector3.one, new Vector3(1, 1, 1), new Vector3(1, 1, 1)));
 		bool canBuild = false;
 
 		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable &&
