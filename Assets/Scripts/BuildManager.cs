@@ -49,8 +49,7 @@ public class BuildManager : MonoBehaviour {
 		if (MapGrid.Instance.grid [node.gridX, node.gridY].walkable &&
 			MapGrid.Instance.grid [node.gridX - 1, node.gridY].walkable &&
 			MapGrid.Instance.grid [node.gridX, node.gridY - 1].walkable &&
-			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable &&
-			!Physics.BoxCast(new Vector3(node.gridX - 1, 0, node.gridY - 1) + Vector3.one, new Vector3(1, 1, 1), new Vector3(1, 1, 1))){
+			MapGrid.Instance.grid [node.gridX - 1, node.gridY - 1].walkable){
 
 			setWalkable (false);
 
